@@ -1,7 +1,7 @@
 import streamlit as st
 import cv2
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter  # Importación añadida
 from io import BytesIO
 import zipfile
 
@@ -97,9 +97,8 @@ def main():
                     processed_img = remove_light_background(img, threshold)
                 else:
                     processed_img = extract_dark_colors(img, 100 - threshold)
-
-                # Aplicar suavizado de bordes para mejor calidad
-                processed_img = processed_img.filter(ImageFilter.SMOOTH_MORE) if processing_mode == "Color oscuro" else processed_img
+                    # Aplicar suavizado solo en modo color oscuro
+                    processed_img = processed_img.filter(ImageFilter.SMOOTH_MORE)
 
                 processed_images.append((file.name, processed_img))
                 progress_bar.progress((i + 1) / len(uploaded_files))
